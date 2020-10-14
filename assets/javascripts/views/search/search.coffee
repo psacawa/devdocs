@@ -35,16 +35,7 @@ class app.views.Search extends app.View
 
     app.on 'ready', @onReady
     $.on window, 'hashchange', @searchUrl
-    $.on window, 'focus', @onWindowFocus
     return
-
-  autoFocus: =>
-    unless app.isMobile() or $.isAndroid() or $.isIOS()
-      @input.focus() unless document.activeElement?.tagName is 'INPUT'
-    return
-
-  onWindowFocus: (event) =>
-    @autoFocus() if event.target is window
 
   getScopeDoc: ->
     @scope.getScope() if @scope.isActive()
@@ -53,7 +44,6 @@ class app.views.Search extends app.View
     @scope.reset() if force or not @input.value
     @el.reset()
     @onInput()
-    @autoFocus()
     return
 
   onReady: =>
@@ -146,7 +136,6 @@ class app.views.Search extends app.View
     return if app.shortcuts.eventInProgress?.name is 'escape'
     @reset(true) if not context.init and app.router.isIndex()
     @delay @searchUrl if context.hash
-    $.requestAnimationFrame @autoFocus
     return
 
   extractHashValue: ->
